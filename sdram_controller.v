@@ -103,7 +103,7 @@ module sdram_controller (
     assign sdram_ba = ba_q;
     assign sdram_a = a_q;
     // assign sdram_dqi = dq_en_q ? dq_q : 8'hZZ; // only drive when dq_en_q is 1
-    assign sdram_dqo = dq_q;
+    assign sdram_dqo = dq_en_q ? dq_q : 32'hZZZZZZZZ;
 
     reg [STATE_SIZE-1:0] state_d, state_q;
     reg [STATE_SIZE-1:0] next_state_d, next_state_q;
@@ -124,6 +124,12 @@ module sdram_controller (
 
     reg rw_op_d, rw_op_q;
 
+    reg [3:0] row_open_d, row_open_q;
+    reg [12:0] row_addr_d[3:0], row_addr_q[3:0];
+
+    reg [2:0] precharge_bank_d, precharge_bank_q;
+    integer i;
+
     assign data_out = data_q;
     assign busy = !ready_q;
     assign out_valid = out_valid_q;
@@ -137,14 +143,21 @@ module sdram_controller (
         cmd_d = CMD_NOP; // default to NOP
         dqm_d = 1'b0;
         ba_d = 2'd0;
-        a_d = 25'd0;
+        a_d = 13'd0;
         state_d = state_q;
         next_state_d = next_state_q;
         delay_ctr_d = delay_ctr_q;
         addr_d = addr_q;
         data_d = data_q;
         out_valid_d = 1'b0;
+        precharge_bank_d = precharge_bank_q;
         rw_op_d = rw_op_q;
+
+        row_open_d = row_open_q;
+
+        // row_addr is a 2d array and must be coppied this way
+        for (i = 0; i < 4; i = i + 1)
+            row_addr_d[i] = row_addr_q[i];
 
         // The data in the SDRAM must be refreshed periodically.
         // This conter ensures that the data remains intact.
@@ -176,6 +189,7 @@ module sdram_controller (
             ///// INITALIZATION /////
             INIT: begin
                 ready_d = 1'b0;
+                row_open_d = 4'b0;
                 out_valid_d = 1'b0;
                 // a_d = 13'b0;
                 // Reserved, Burst Access, Standard Op, CAS = 2, Sequential, Burst = 4
@@ -204,16 +218,21 @@ module sdram_controller (
                 delay_ctr_d = delay_ctr_q - 1'b1;
                 if (delay_ctr_q == 13'd0) begin
                     state_d = next_state_q;
-                    if (next_state_q == WRITE) begin
-                        dq_en_d = 1'b1; // enable the bus early
-                        dq_d = data_q;
-                    end
+                    // if (next_state_q == WRITE) begin
+                    //     dq_en_d = 1'b1; // enable the bus early
+                    //     dq_d = data_q[7:0];
+                    // end
                 end
             end
 
             ///// IDLE STATE /////
             IDLE: begin
-                if (!ready_q) begin // operation waiting
+                if (refresh_flag_q) begin // we need to do a refresh
+                    state_d = PRECHARGE;
+                    next_state_d = REFRESH;
+                    precharge_bank_d = 3'b100; // all banks
+                    refresh_flag_d = 1'b0; // clear the refresh flag
+                end else if (!ready_q) begin // operation waiting
                     ready_d = 1'b1; // clear the queue
                     rw_op_d = saved_rw_q; // save the values we'll need later
                     addr_d = saved_addr_q;
@@ -221,10 +240,37 @@ module sdram_controller (
                     if (saved_rw_q) // Write
                         data_d = saved_data_q;
 
-                    
-                    // no rows open
-                    state_d = ACTIVATE; // open the row
+                    // if the row is open we don't have to activate it
+                    if (row_open_q[saved_addr_q[9:8]]) begin
+                        if (row_addr_q[saved_addr_q[9:8]] == saved_addr_q[22:10]) begin
+                            // Row is already open
+                            if (saved_rw_q)
+                                state_d = WRITE;
+                            else
+                                state_d = READ;
+                        end else begin
+                            // A different row in the bank is open
+                            state_d = PRECHARGE; // precharge open row
+                            precharge_bank_d = {1'b0, saved_addr_q[9:8]};
+                            next_state_d = ACTIVATE; // open current row
+                        end
+                    end else begin
+                        // no rows open
+                        state_d = ACTIVATE; // open the row
+                    end
                 end
+            end
+
+            ///// REFRESH /////
+            REFRESH: begin
+                cmd_d = CMD_REFRESH;
+                state_d = WAIT;
+
+                // Jiin
+                // delay_ctr_d = 13'd6; // gotta wait 7 clocks (66ns)
+                delay_ctr_d = tREF;
+
+                next_state_d = IDLE;
             end
 
             ///// ACTIVATE /////
@@ -243,6 +289,9 @@ module sdram_controller (
                     next_state_d = WRITE;
                 else
                     next_state_d = READ;
+
+                row_open_d[addr_q[9:8]] = 1'b1; // row is now open
+                row_addr_d[addr_q[9:8]] = addr_q[22:10];
             end
 
             ///// READ /////
@@ -260,7 +309,7 @@ module sdram_controller (
 
             end
             READ_RES: begin
-                data_d = data_q;
+                data_d = dqi_q;
                 out_valid_d = 1'b1;
                 state_d = IDLE;
             end
@@ -270,12 +319,30 @@ module sdram_controller (
                 cmd_d = CMD_WRITE;
 
                 dq_d = data_q;
-                data_d = data_q; // shift the data out
+                // data_d = data_q;
                 dq_en_d = 1'b1; // enable out bus
                 a_d = {2'b0, 1'b0, addr_q[7:0], 2'b00};
                 ba_d = addr_q[9:8];
 
                 state_d = IDLE;
+            end
+
+            ///// PRECHARGE /////
+            PRECHARGE: begin
+                cmd_d = CMD_PRECHARGE;
+                a_d[10] = precharge_bank_q[2]; // all banks
+                ba_d = precharge_bank_q[1:0];
+                state_d = WAIT;
+
+                // Jiin
+                // delay_ctr_d = 13'd0;
+                delay_ctr_d = tPRE;
+
+                if (precharge_bank_q[2]) begin
+                    row_open_d = 4'b0000; // closed all rows
+                end else begin
+                    row_open_d[precharge_bank_q[1:0]] = 1'b0; // closed one row
+                end
             end
 
             default: state_d = INIT;
@@ -312,6 +379,10 @@ module sdram_controller (
         data_q <= data_d;
         addr_q <= addr_d;
         out_valid_q <= out_valid_d;
+        row_open_q <= row_open_d;
+        for (i = 0; i < 4; i = i + 1)
+            row_addr_q[i] <= row_addr_d[i];
+        precharge_bank_q <= precharge_bank_d;
         rw_op_q <= rw_op_d;
         delay_ctr_q <= delay_ctr_d;
     end

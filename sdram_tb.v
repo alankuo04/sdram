@@ -21,6 +21,7 @@
 `define CYCLE       10.0
 `define DEL         1.0
 `define MAX_CYCLE   10000
+`define TEST_NUM    5
 
 module sdram_tb;
 
@@ -39,9 +40,9 @@ wire [31:0] dat_o;
 
 reg [31:0] golden_dat;
 
-localparam TEST_NUM = 4;
+reg [11:0] random_adr [0:`TEST_NUM-1];
 
-integer i;
+integer i, j;
 
 uut uut(
     .wb_clk_i(clk),
@@ -64,9 +65,11 @@ initial begin
     we_i = 1'b1;
     sel_i = 4'b0;
     dat_i = 32'b0;
-    adr_i = 32'd12;
     golden_dat = 32'b0;
     i = 0;
+    for (j=0; j<`TEST_NUM; j=j+1) begin
+        random_adr[j] = $random;
+    end
 end
 
 always begin #(`CYCLE/2)  clk = ~clk; end
@@ -79,36 +82,25 @@ initial begin
     $display("-----------------------------------------------------\n"); 
     $display("Start to Send Input Data ...");
     $display("\n");
-    stb_i = 1'b1;
-    cyc_i = 1'b1;
-    we_i = 1'b1;
-    while (i < TEST_NUM) begin
+    
+    while (i < `TEST_NUM) begin
         @(posedge clk);
         if (ack_o) begin
-            dat_i = $random();
-            RAM[adr_i] = dat_i;
-            adr_i = adr_i + 4;
+            write;
             i = i + 1;
         end
     end
-    adr_i = 32'd12;
-    we_i = 1'b0;
     i = 0;
-    while (i < TEST_NUM) begin
+    while (i < `TEST_NUM) begin
         @(posedge clk);
         if (ack_o) begin
-            golden_dat = RAM[adr_i];
-            if (golden_dat !== dat_o) begin
-                $display("addr: %h, golden: %h, dat_o: %h", adr_i, golden_dat, dat_o);
-                // $finish;
-            end
-            adr_i = adr_i + 4;
+            read;
             i = i + 1;
         end
     end
-	$display("-----------------------------------------------------\n");
-	$display("------------------Congratulations!!!-----------------\n");
- 	$display("-----------------------------------------------------\n");
+	// $display("-----------------------------------------------------\n");
+	// $display("------------------Congratulations!!!-----------------\n");
+ 	// $display("-----------------------------------------------------\n");
  	$finish;
 end
 
@@ -120,6 +112,29 @@ initial begin
  	$display("-----------------------------------------------------\n");
  	$finish;
 end
-   
+
+task write;
+    begin
+        we_i = 1'b1;
+        adr_i = random_adr[i];
+        dat_i = $random();
+        RAM[adr_i] = dat_i;
+        $display("Time %t Write: addr: %h, dat_i: %h", $time, adr_i, dat_i);
+    end
+endtask
+
+task read;
+    begin
+        we_i = 1'b0;
+        adr_i = random_adr[i];
+        dat_i = 32'hZZZZZZZZ;
+        golden_dat = RAM[adr_i];
+        $display("Time %t Read: addr: %h, dat_o: %h", $time, adr_i, dat_o);
+        if (golden_dat !== dat_o) begin
+            $display("Error: addr: %h, golden: %h, dat_o: %h", adr_i, golden_dat, dat_o);
+            // $finish;
+        end
+    end
+endtask
 
 endmodule
