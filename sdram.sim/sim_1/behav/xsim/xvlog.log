@@ -1,0 +1,11 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/eehpc/sdram/sdram/sdram.srcs/sources_1/new/sdr.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module sdr
+INFO: [VRFC 10-311] analyzing module blkRam
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/eehpc/sdram/sdram/sdram.srcs/sources_1/new/sdram_controller.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module sdram_controller
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/eehpc/sdram/sdram/sdram.srcs/sources_1/new/uut.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module uut
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/eehpc/sdram/sdram/sdram.srcs/sim_1/new/sdram_tb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module sdram_tb
+INFO: [VRFC 10-2263] Analyzing Verilog file "/home/eehpc/sdram/sdram/sdram.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl

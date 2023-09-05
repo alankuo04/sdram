@@ -207,7 +207,7 @@ module sdram_controller (
                 // delay_ctr_d = 16'd10100; // wait for 101us
                 // next_state_d = PRECHARGE_INIT;
 
-                delay_ctr_d = 16'd0;  
+                delay_ctr_d = 16'd0;
                 next_state_d = IDLE;
                 refresh_flag_d = 1'b0;
                 refresh_ctr_d = 10'b1;

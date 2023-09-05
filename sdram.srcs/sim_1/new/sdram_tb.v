@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 08/21/2023 05:37:46 PM
+// Create Date: 09/05/2023 05:47:09 PM
 // Design Name: 
-// Module Name: sdram_tb
+// Module Name: sdram__tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -27,7 +27,7 @@ module sdram_tb;
 
 reg clk;
 reg rst;
-reg [31:0] RAM [0:1024*4-1];
+reg [31:0] RAM [0:1024*1024*4-1];
 
 reg stb_i;
 reg cyc_i;
@@ -40,9 +40,11 @@ wire [31:0] dat_o;
 
 reg [31:0] golden_dat;
 
-reg [11:0] random_adr [0:`TEST_NUM-1];
+reg [31:0] dat_o_mem [0:`TEST_NUM-1];
 
-integer i, j;
+reg [22:0] random_adr [0:`TEST_NUM-1];
+
+integer i, j, k;
 
 uut uut(
     .wb_clk_i(clk),
@@ -67,8 +69,9 @@ initial begin
     dat_i = 32'b0;
     golden_dat = 32'b0;
     i = 0;
-    for (j=0; j<`TEST_NUM; j=j+1) begin
-        random_adr[j] = $random;
+    j = 0;
+    for (k=0; k<`TEST_NUM; k=k+1) begin
+        random_adr[k] = $random;
     end
 end
 
@@ -85,22 +88,16 @@ initial begin
     
     while (i < `TEST_NUM) begin
         @(posedge clk);
-        if (ack_o) begin
-            write;
-            i = i + 1;
-        end
+        write;
     end
-    i = 0;
-    while (i < `TEST_NUM) begin
+    while (j < `TEST_NUM+3) begin
         @(posedge clk);
-        if (ack_o) begin
-            read;
-            i = i + 1;
-        end
+        read;
     end
 	// $display("-----------------------------------------------------\n");
 	// $display("------------------Congratulations!!!-----------------\n");
  	// $display("-----------------------------------------------------\n");
+    check;
  	$finish;
 end
 
@@ -115,24 +112,44 @@ end
 
 task write;
     begin
-        we_i = 1'b1;
-        adr_i = random_adr[i];
-        dat_i = $random();
-        RAM[adr_i] = dat_i;
-        $display("Time %t Write: addr: %h, dat_i: %h", $time, adr_i, dat_i);
+        if (ack_o) begin
+            we_i = 1'b1;
+            adr_i = random_adr[i];
+            dat_i = $random();
+            RAM[adr_i] = dat_i;
+            $display("Time %t Write: addr: %h, dat_i: %h", $time, adr_i, dat_i);
+            i = i + 1;
+        end
     end
 endtask
 
 task read;
     begin
-        we_i = 1'b0;
-        adr_i = random_adr[i];
-        dat_i = 32'hZZZZZZZZ;
-        golden_dat = RAM[adr_i];
-        $display("Time %t Read: addr: %h, dat_o: %h", $time, adr_i, dat_o);
-        if (golden_dat !== dat_o) begin
-            $display("Error: addr: %h, golden: %h, dat_o: %h", adr_i, golden_dat, dat_o);
-            // $finish;
+        if (ack_o) begin
+            we_i = 1'b0;
+            adr_i = random_adr[j];
+            dat_i = 32'hZZZZZZZZ;
+            golden_dat = RAM[adr_i];
+            $display("Time %t Read: addr: %h, dat_o: %h", $time, adr_i, dat_o);
+            // if (golden_dat !== dat_o) begin
+            //     $display("Error: addr: %h, golden: %h, dat_o: %h", adr_i, golden_dat, dat_o);
+            //     // $finish;
+            // end
+            if (j - 2 > 0) begin
+                dat_o_mem[j - 3] = dat_o;
+            end
+            j = j + 1;
+        end
+    end
+endtask
+
+task check;
+    begin
+        for (i = 0; i < `TEST_NUM; i = i + 1) begin
+            if (RAM[random_adr[i]] !== dat_o_mem[i]) begin
+                $display("Error: addr: %h, golden: %h, dat_o: %h", random_adr[i], RAM[random_adr[i]], dat_o_mem[i]);
+                // $finish;
+            end
         end
     end
 endtask
