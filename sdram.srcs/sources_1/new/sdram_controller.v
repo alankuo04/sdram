@@ -188,7 +188,7 @@ module sdram_controller (
         case (state_q)
             ///// INITALIZATION /////
             INIT: begin
-                ready_d = 1'b0;
+                // ready_d = 1'b0;
                 row_open_d = 4'b0;
                 out_valid_d = 1'b0;
                 // a_d = 13'b0;
@@ -208,9 +208,11 @@ module sdram_controller (
                 // next_state_d = PRECHARGE_INIT;
 
                 delay_ctr_d = 16'd0;
+                // delay_ctr_d = 16'd1;
                 next_state_d = IDLE;
                 refresh_flag_d = 1'b0;
                 refresh_ctr_d = 10'b1;
+                ready_d = 1'b1;
 
                 dq_en_d = 1'b0;
             end
@@ -309,7 +311,7 @@ module sdram_controller (
 
             end
             READ_RES: begin
-                data_d = dqi_q;
+                data_d = dqi_q; // data_d by pass
                 out_valid_d = 1'b1;
                 state_d = IDLE;
             end

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="sdram_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="sdram_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="4.001288 us"></ZoomEndTime>
+      <Cursor1Time time="0.000000 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="176"></NameColumnWidth>
+      <ValueColumnWidth column_width="85"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="69" />
+   <wvobject type="logic" fp_name="/sdram_tb/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/stb_i">
+      <obj_property name="ElementShortName">stb_i</obj_property>
+      <obj_property name="ObjectShortName">stb_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/cyc_i">
+      <obj_property name="ElementShortName">cyc_i</obj_property>
+      <obj_property name="ObjectShortName">cyc_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/we_i">
+      <obj_property name="ElementShortName">we_i</obj_property>
+      <obj_property name="ObjectShortName">we_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/ctrl_in_valid_d">
+      <obj_property name="ElementShortName">ctrl_in_valid_d</obj_property>
+      <obj_property name="ObjectShortName">ctrl_in_valid_d</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/ctrl_in_valid_q">
+      <obj_property name="ElementShortName">ctrl_in_valid_q</obj_property>
+      <obj_property name="ObjectShortName">ctrl_in_valid_q</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/sel_i">
+      <obj_property name="ElementShortName">sel_i[3:0]</obj_property>
+      <obj_property name="ObjectShortName">sel_i[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/dat_i">
+      <obj_property name="ElementShortName">dat_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dat_i[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/adr_i">
+      <obj_property name="ElementShortName">adr_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">adr_i[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/ack_o">
+      <obj_property name="ElementShortName">ack_o</obj_property>
+      <obj_property name="ObjectShortName">ack_o</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/dat_o">
+      <obj_property name="ElementShortName">dat_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dat_o[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/i">
+      <obj_property name="ElementShortName">i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">i[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/j">
+      <obj_property name="ElementShortName">j[31:0]</obj_property>
+      <obj_property name="ObjectShortName">j[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/k">
+      <obj_property name="ElementShortName">k[31:0]</obj_property>
+      <obj_property name="ObjectShortName">k[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/rw">
+      <obj_property name="ElementShortName">rw[0:19]</obj_property>
+      <obj_property name="ObjectShortName">rw[0:19]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/busy">
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/in_valid">
+      <obj_property name="ElementShortName">in_valid</obj_property>
+      <obj_property name="ObjectShortName">in_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/out_valid">
+      <obj_property name="ElementShortName">out_valid</obj_property>
+      <obj_property name="ObjectShortName">out_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/user_addr">
+      <obj_property name="ElementShortName">user_addr[22:0]</obj_property>
+      <obj_property name="ObjectShortName">user_addr[22:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/addr">
+      <obj_property name="ElementShortName">addr[22:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[22:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/cle_q">
+      <obj_property name="ElementShortName">cle_q</obj_property>
+      <obj_property name="ObjectShortName">cle_q</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/cmd_q">
+      <obj_property name="ElementShortName">cmd_q[3:0]</obj_property>
+      <obj_property name="ObjectShortName">cmd_q[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/ba_q">
+      <obj_property name="ElementShortName">ba_q[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ba_q[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/a_q">
+      <obj_property name="ElementShortName">a_q[12:0]</obj_property>
+      <obj_property name="ObjectShortName">a_q[12:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/dq_q">
+      <obj_property name="ElementShortName">dq_q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dq_q[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/dqi_q">
+      <obj_property name="ElementShortName">dqi_q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dqi_q[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/dq_en_q">
+      <obj_property name="ElementShortName">dq_en_q</obj_property>
+      <obj_property name="ObjectShortName">dq_en_q</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/state_q">
+      <obj_property name="ElementShortName">state_q[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state_q[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/next_state_q">
+      <obj_property name="ElementShortName">next_state_q[3:0]</obj_property>
+      <obj_property name="ObjectShortName">next_state_q[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/addr_q">
+      <obj_property name="ElementShortName">addr_q[22:0]</obj_property>
+      <obj_property name="ObjectShortName">addr_q[22:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/data_q">
+      <obj_property name="ElementShortName">data_q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data_q[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/out_valid_q">
+      <obj_property name="ElementShortName">out_valid_q</obj_property>
+      <obj_property name="ObjectShortName">out_valid_q</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/delay_ctr_q">
+      <obj_property name="ElementShortName">delay_ctr_q[15:0]</obj_property>
+      <obj_property name="ObjectShortName">delay_ctr_q[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/refresh_ctr_q">
+      <obj_property name="ElementShortName">refresh_ctr_q[9:0]</obj_property>
+      <obj_property name="ObjectShortName">refresh_ctr_q[9:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/refresh_flag_q">
+      <obj_property name="ElementShortName">refresh_flag_q</obj_property>
+      <obj_property name="ObjectShortName">refresh_flag_q</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/ready_q">
+      <obj_property name="ElementShortName">ready_q</obj_property>
+      <obj_property name="ObjectShortName">ready_q</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/saved_rw_q">
+      <obj_property name="ElementShortName">saved_rw_q</obj_property>
+      <obj_property name="ObjectShortName">saved_rw_q</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/saved_addr_q">
+      <obj_property name="ElementShortName">saved_addr_q[22:0]</obj_property>
+      <obj_property name="ObjectShortName">saved_addr_q[22:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/saved_data_q">
+      <obj_property name="ElementShortName">saved_data_q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">saved_data_q[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/rw_op_q">
+      <obj_property name="ElementShortName">rw_op_q</obj_property>
+      <obj_property name="ObjectShortName">rw_op_q</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/row_open_q">
+      <obj_property name="ElementShortName">row_open_q[3:0]</obj_property>
+      <obj_property name="ObjectShortName">row_open_q[3:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/row_addr_q">
+      <obj_property name="ElementShortName">row_addr_q[3:0][12:0]</obj_property>
+      <obj_property name="ObjectShortName">row_addr_q[3:0][12:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/precharge_bank_q">
+      <obj_property name="ElementShortName">precharge_bank_q[2:0]</obj_property>
+      <obj_property name="ObjectShortName">precharge_bank_q[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_cle">
+      <obj_property name="ElementShortName">sdram_cle</obj_property>
+      <obj_property name="ObjectShortName">sdram_cle</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_cs">
+      <obj_property name="ElementShortName">sdram_cs</obj_property>
+      <obj_property name="ObjectShortName">sdram_cs</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_ras">
+      <obj_property name="ElementShortName">sdram_ras</obj_property>
+      <obj_property name="ObjectShortName">sdram_ras</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_cas">
+      <obj_property name="ElementShortName">sdram_cas</obj_property>
+      <obj_property name="ObjectShortName">sdram_cas</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_we">
+      <obj_property name="ElementShortName">sdram_we</obj_property>
+      <obj_property name="ObjectShortName">sdram_we</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_dqm">
+      <obj_property name="ElementShortName">sdram_dqm</obj_property>
+      <obj_property name="ObjectShortName">sdram_dqm</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_ba">
+      <obj_property name="ElementShortName">sdram_ba[1:0]</obj_property>
+      <obj_property name="ObjectShortName">sdram_ba[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_a">
+      <obj_property name="ElementShortName">sdram_a[12:0]</obj_property>
+      <obj_property name="ObjectShortName">sdram_a[12:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_dqi">
+      <obj_property name="ElementShortName">sdram_dqi[31:0]</obj_property>
+      <obj_property name="ObjectShortName">sdram_dqi[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/sdram_dqo">
+      <obj_property name="ElementShortName">sdram_dqo[31:0]</obj_property>
+      <obj_property name="ObjectShortName">sdram_dqo[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_sdram_controller/state_q">
+      <obj_property name="ElementShortName">state_q[3:0]</obj_property>
+      <obj_property name="ObjectShortName">state_q[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/Bank0/RAM">
+      <obj_property name="ElementShortName">RAM[0:1023][31:0]</obj_property>
+      <obj_property name="ObjectShortName">RAM[0:1023][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/Bank1/RAM">
+      <obj_property name="ElementShortName">RAM[0:1023][31:0]</obj_property>
+      <obj_property name="ObjectShortName">RAM[0:1023][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/Bank2/RAM">
+      <obj_property name="ElementShortName">RAM[0:1023][31:0]</obj_property>
+      <obj_property name="ObjectShortName">RAM[0:1023][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/Bank3/RAM">
+      <obj_property name="ElementShortName">RAM[0:1023][31:0]</obj_property>
+      <obj_property name="ObjectShortName">RAM[0:1023][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_bram/Data_in_enable">
+      <obj_property name="ElementShortName">Data_in_enable</obj_property>
+      <obj_property name="ObjectShortName">Data_in_enable</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_bram/Data_out_enable">
+      <obj_property name="ElementShortName">Data_out_enable</obj_property>
+      <obj_property name="ObjectShortName">Data_out_enable</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sdram_tb/uut/user_bram/Data_out_enable_buf">
+      <obj_property name="ElementShortName">Data_out_enable_buf</obj_property>
+      <obj_property name="ObjectShortName">Data_out_enable_buf</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/bren">
+      <obj_property name="ElementShortName">bren[3:0]</obj_property>
+      <obj_property name="ObjectShortName">bren[3:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/bwen">
+      <obj_property name="ElementShortName">bwen[3:0]</obj_property>
+      <obj_property name="ObjectShortName">bwen[3:0]</obj_property>
+      <obj_property name="Radix">BINARYRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/Bank1/waddr">
+      <obj_property name="ElementShortName">waddr[9:0]</obj_property>
+      <obj_property name="ObjectShortName">waddr[9:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/Bank1/raddr">
+      <obj_property name="ElementShortName">raddr[9:0]</obj_property>
+      <obj_property name="ObjectShortName">raddr[9:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/Bank1/d">
+      <obj_property name="ElementShortName">d[31:0]</obj_property>
+      <obj_property name="ObjectShortName">d[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sdram_tb/uut/user_bram/Bank1/q">
+      <obj_property name="ElementShortName">q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">q[31:0]</obj_property>
+   </wvobject>
+</wave_config>

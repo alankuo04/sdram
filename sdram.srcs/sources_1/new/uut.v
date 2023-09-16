@@ -58,9 +58,11 @@ module uut(
     wire ctrl_out_valid;
 
     // reg ack, ctrl_out_valid_q;
+    reg ctrl_in_valid_q, ctrl_in_valid_d;
 
     // WB MI A
-    assign valid = wbs_stb_i;
+    assign valid = (wbs_we_i) ? wbs_stb_i : ctrl_in_valid_q;
+    // assign valid = wbs_stb_i;
     assign wbs_ack_o = (wbs_we_i) ? ~ctrl_busy : ctrl_out_valid;
     // assign wbs_ack_o = ack;
 
@@ -72,6 +74,32 @@ module uut(
     // assign bram_mask = {4{sdram_dqm}};
     assign bram_mask = wbs_sel_i;
 
+    always @(*) begin
+        // ctrl_in_valid_d = ctrl_in_valid_q;
+        if (~wbs_we_i) begin 
+            if (ctrl_in_valid_d) begin
+                if (~ctrl_busy) begin
+                    ctrl_in_valid_d = 1'b0;
+                end
+            end
+            else begin
+                if (ctrl_out_valid)
+                    ctrl_in_valid_d = 1'b1; 
+            end
+        end
+        else begin
+            ctrl_in_valid_d = 1'b1;
+        end
+    end
+
+    always @(posedge clk) begin
+        if (rst) begin
+            ctrl_in_valid_q <= 1'b1;
+        end
+        else begin
+            ctrl_in_valid_q <= (ctrl_in_valid_d && wbs_stb_i);
+        end
+    end
     // always@(posedge clk) begin
     //     if (rst) begin
     //         ack <= 1'b0;

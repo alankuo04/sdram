@@ -193,7 +193,7 @@ module sdr (
     reg                   [1 : 0] Dqm_reg0, Dqm_reg1;               // DQM Operation Pipeline
     reg       [ADDR_BITS - 1 : 0] B0_row_addr, B1_row_addr, B2_row_addr, B3_row_addr;
 
-    reg           [ADDR_BITS : 0] Mode_reg;
+    reg        [ADDR_BITS - 1: 0] Mode_reg;
     reg         [DQ_BITS - 1 : 0] Dq_reg, Dq_dqm;
     reg        [COL_BITS - 1 : 0] Col_temp, Burst_counter;
 
@@ -262,7 +262,10 @@ module sdr (
     // Dq separate Dqi, Dqo
     // assign    Dq               = Dq_reg;                        // DQ buffer
     wire    [DQ_BITS - 1 : 0]  Dqo;
-    assign      Dqo = Dq_reg;
+    // assign      Dqo = Dq_reg;
+    assign      Dqo = Dq_temp;
+    wire    [DQ_BITS - 1 : 0]  Dq_temp;
+    assign      Dq_temp = (Data_out_enable_buf) ? bdq[Bank_temp_buf] : 0;
     //assign      Dq  = Data_out_enable ? Dq_reg : Dqi;
 
     
@@ -364,7 +367,7 @@ module sdr (
                     bren = 4'b0000;
                 end
             endcase
-        end else if(Data_out_enable)begin
+        end else if(Command[2] == `READ)begin//Data_out_enable, Command[1] == `READ
             case(Bank_temp)
                 2'b00:begin
                     bwen = 4'b0000;
@@ -500,9 +503,9 @@ module sdr (
                 Command[Cas_latency - 1] <= `BST;
             end
             else if (Read_enable === 1'b1) begin
-                Command[Cas_latency - 1] <= `READ;
-                Col_addr[Cas_latency - 1] <= Addr;
-                Bank_addr[Cas_latency - 1] <= Ba;
+                Command[Cas_latency - 1] <= `READ;//Cas_latency - 1
+                Col_addr[Cas_latency - 1] <= Addr;//Cas_latency - 1
+                Bank_addr[Cas_latency - 1] <= Ba;//Cas_latency - 1
             end    
             else if (Write_enable == 1'b1) begin
                 Command[Cas_latency - 1] <= `WRITE;//0
@@ -515,13 +518,20 @@ module sdr (
                 {Bank_precharge[2]} <= {Bank_precharge[3]};
                 {A10_precharge[0], A10_precharge[1]} <= {A10_precharge[1], A10_precharge[2]};
             end
+            
             {Command[0], Command[1]} <= {Command[1], Command[2]};
             {Col_addr[0], Col_addr[1]} <= {Col_addr[1], Col_addr[2]};
             {Bank_addr[0], Bank_addr[1]} <= {Bank_addr[1], Bank_addr[2]};
+                
             {Bank_precharge[0], Bank_precharge[1]} <= {Bank_precharge[1], Bank_precharge[2]};
             {A10_precharge[0], A10_precharge[1]} <= {A10_precharge[1], A10_precharge[2]};
-            Bank_temp <= Bank_addr[0];
-            Bank_temp_buf <= Bank_temp;
+            if(Read_enable)begin//Command[2] == `READ
+                Bank_temp <= Ba;//Bank_addr[2]
+                Bank_temp_buf <= Bank_temp;
+            end else begin
+                Bank_temp <= Bank_addr[0];
+                Bank_temp_buf <= Bank_temp;
+            end
         end
     end
 
@@ -530,13 +540,10 @@ module sdr (
         if(!Rst_n) begin
             // Mode_reg =  13'b000_0_00_011_0_011;  // Cas-latency = 3; burst-length = 8; write burst
             // Currently we run at non-burst mode
-            // Mode_reg <=  13'b000_1_00_011_0_000;  // Cas-latency = 3; burst-length = 1; No write burst
-            
-            Mode_reg <= 13'b000_0_00_011_0_000;
+            Mode_reg <=  13'b000_1_00_011_0_000;  // Cas-latency = 3; burst-length = 1; No write burst
         end else if (Mode_reg_enable === 1'b1) begin
             // Register Mode
-            // Mode_reg <= 13'b000_1_00_011_0_000;//Addr;
-            Mode_reg <= 13'b000_0_00_011_0_000;
+            Mode_reg <= 13'b000_1_00_011_0_000;//Addr;
         end
     end 
 
@@ -755,17 +762,30 @@ module sdr (
             end
     
     // Detect Read or Write command
-            if (Command[0] == `READ || Command[0] == `WRITE) begin
-                Bank <= Bank_addr[0];
-                Col <= Col_addr[0];
-                Col_brst <= Col_addr[0];
-                case (Bank_addr[0])
-                    2'b00 : Row <= B0_row_addr;
-                    2'b01 : Row <= B1_row_addr;
-                    2'b10 : Row <= B2_row_addr;
-                    2'b11 : Row <= B3_row_addr;
-                endcase
-                Burst_counter <= 0;
+            if (Read_enable || Command[0] == `WRITE) begin//Command[2] == `READ
+                if(Read_enable)begin//Command[2] == `READ
+                    Bank <= Ba;//Bank_addr[2]
+                    Col <= Addr;//Col_addr[2]
+                    Col_brst <= Addr;//Col_addr[2]
+                    case (Ba)//Bank_addr[2]
+                        2'b00 : Row <= B0_row_addr;
+                        2'b01 : Row <= B1_row_addr;
+                        2'b10 : Row <= B2_row_addr;
+                        2'b11 : Row <= B3_row_addr;
+                    endcase
+                    Burst_counter <= 0;
+                end else begin
+                    Bank <= Bank_addr[0];
+                    Col <= Col_addr[0];
+                    Col_brst <= Col_addr[0];
+                    case (Bank_addr[0])
+                        2'b00 : Row <= B0_row_addr;
+                        2'b01 : Row <= B1_row_addr;
+                        2'b10 : Row <= B2_row_addr;
+                        2'b11 : Row <= B3_row_addr;
+                    endcase
+                    Burst_counter <= 0;
+                end
                 //Data_in_enable = 1'b0;
                 //Data_out_enable = 1'b1;
                 //if(Command[0] == `READ) begin
@@ -855,10 +875,11 @@ module sdr (
 
                 // Display debug message
                 //Dq_reg = #tAC Dq_dqm;
-                // if (Debug) begin
-                //     $display("%m : at time %t READ : Bank = %d Row = %d, Col = %d, Dqm = %b, Data = %h", $time, Bank, Row, Col, Dqm_reg0, Dq_reg);
-                // end
-    
+`ifdef SIM
+                if (Debug) begin
+                    $display("%m : at time %t READ : Bank = %d Row = %d, Col = %d, Dqm = %b, Data = %h", $time, Bank, Row, Col, Dqm_reg0, Dq_reg);
+                end
+`endif
                 // Advance burst counter subroutine
                 // Burst_decode;
                 // Reduce the Burst_decode to handle only
@@ -936,10 +957,10 @@ module sdr (
                     Data_out_enable <= 1'b0;
                 end
             end    
-            else if (Command[0] == `READ || Command[0] == `WRITE) begin
+            else if (Read_enable || Command[0] == `WRITE) begin//Command[2] == `READ
                 //Data_in_enable <= 1'b0;
                 //Data_out_enable <= 1'b1;
-                if(Command[0] == `READ) begin
+                if(Read_enable) begin//Command[2] == `READ
                     Data_in_enable <= 1'b0;
                     Data_out_enable <= 1'b1;
                 end else begin
@@ -1839,7 +1860,7 @@ module blkRam #(parameter SIZE = 8192, parameter BIT_WIDTH = 8)(clk, we, re, wad
     input [ADDR_WIDTH-1:0]         waddr, raddr;
     input [BIT_WIDTH-1:0]          d;
     output reg [BIT_WIDTH-1:0]     q;
-    reg [BIT_WIDTH-1:0] RAM [SIZE-1:0];
+    reg [BIT_WIDTH-1:0] RAM [0:SIZE-1];
     //initial $readmemh(`RAMinitFile, RAM);
     
     always @(posedge clk)begin
